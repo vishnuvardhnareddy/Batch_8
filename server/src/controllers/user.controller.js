@@ -12,30 +12,74 @@ const isLoggedIn = (req, res, next) => {
     return next(new ApiError(401, 'You must be logged in to access this resource.'));
 };
 
-// Register user
+// Function to validate user data
+const validateUserData = (username, password) => {
+    const errors = [];
+
+    if (!username || typeof username !== 'string' || username.trim() === '') {
+        errors.push('Username is required.');
+    }
+    if (!password || typeof password !== 'string' || password.length < 5) {
+        errors.push('Password must be at least 6 characters long.');
+    }
+
+    return errors;
+};
+
+// Register and log in user
 const registerUser = async (req, res, next) => {
     try {
         const { username, password } = req.body;
+
+        // Validate user data
+        const validationErrors = validateUserData(username, password);
+        if (validationErrors.length > 0) {
+            return next(new ApiError(400, 'Validation Error', validationErrors));
+        }
+
+        // Check if the user already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return next(new ApiError(409, 'Username is already taken.'));
+        }
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({ username, password: hashedPassword });
 
-        res.status(201).json(new ApiResponse(201, user, 'User registered successfully', {
-            message: 'Registration completed. You can now log in.',
-        }));
+        // Log in the user immediately after registration
+        req.login(user, (err) => {
+            if (err) {
+                return next(new ApiError(500, 'Error occurred during login after registration.', [err.message]));
+            }
+
+            res.status(201).json(new ApiResponse(201, user, 'User registered and logged in successfully', {
+                message: 'Welcome! Your account has been created and you are now logged in.',
+            }));
+        });
     } catch (error) {
         return next(new ApiError(500, 'An error occurred during registration.', [error.message]));
     }
 };
 
 // Login user
-const loginUser = (req, res, next) => {
+const loginUser = async (req, res, next) => {
+    const { username, password } = req.body;
+
+    // Validate user data
+    const validationErrors = validateUserData(username, password);
+    if (validationErrors.length > 0) {
+        return next(new ApiError(400, 'Validation Error', validationErrors));
+    }
+
+    // If the user is authenticated, return user details
     if (req.isAuthenticated()) {
         return res.status(200).json(new ApiResponse(200, req.user, 'Logged in successfully', {
             message: 'Welcome back!',
         }));
     }
+
+    // If the user is not authenticated, trigger an error
     return next(new ApiError(401, 'User authentication failed. Please check your credentials.'));
 };
 
@@ -51,14 +95,4 @@ const logoutUser = (req, res, next) => {
     });
 };
 
-// Fetch user details
-const getUserDetails = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        return next(new ApiError(401, 'User is not logged in.'));
-    }
-    res.status(200).json(new ApiResponse(200, req.user, 'User details retrieved successfully', {
-        message: 'Here are your profile details.',
-    }));
-};
-
-export { registerUser, loginUser, logoutUser, getUserDetails, isLoggedIn };
+export { registerUser, loginUser, logoutUser, isLoggedIn };

@@ -17,10 +17,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+// Middleware
 app.use(cors({
-    origin: 'http://your-frontend-url.com', // Replace with your frontend URL
-    credentials: true,
+    origin: 'http://localhost:5173', // your frontend URL
+    credentials: true, // Allow credentials
 }));
+
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
@@ -28,10 +30,11 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        secure: false, // Set to true if using HTTPS
+        secure: false, // Change to true for production with HTTPS
         maxAge: 1000 * 60 * 60 * 24,
     },
 }));
+
 
 // Passport.js initialization
 app.use(passport.initialize());
@@ -77,5 +80,7 @@ app.get("/", (_, res) => {
 import userRoutes from './routes/user.route.js';
 app.use('/api/v1/user', userRoutes);
 
+// Test route
+app.get('/', (req, res) => res.send('Hello, world!'));
 
 export default app;

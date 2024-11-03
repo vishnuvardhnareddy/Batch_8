@@ -1,4 +1,3 @@
-// routes/user.route.js
 import express from 'express';
 import passport from 'passport';
 import { registerUser, loginUser, logoutUser, isLoggedIn } from '../controllers/user.controller.js';
@@ -6,8 +5,17 @@ import asyncHandler from '../utils/asyncHandler.js';
 
 const router = express.Router();
 
+// Register user route
 router.post('/register', asyncHandler(registerUser));
-router.post('/login', passport.authenticate('local', { session: true }), asyncHandler(loginUser));
-router.get('/logout', isLoggedIn, asyncHandler(logoutUser)); // Ensure user is logged in before logging out
+
+// Login user route
+router.post(
+    '/login',
+    passport.authenticate('local', { session: true }), // Authenticate using passport
+    asyncHandler(loginUser)
+);
+
+// Logout user route (only accessible if logged in)
+router.get('/logout', isLoggedIn, asyncHandler(logoutUser));
 
 export default router;
