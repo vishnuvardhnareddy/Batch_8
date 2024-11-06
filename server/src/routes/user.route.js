@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
-import { registerUser, loginUser, logoutUser, isLoggedIn } from '../controllers/user.controller.js';
+import { registerUser, loginUser, logoutUser } from '../controllers/user.controller.js';
+import isLoggedIn from '../middlewares/isLoggedIn.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 const router = express.Router();

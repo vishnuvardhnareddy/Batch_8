@@ -5,12 +5,6 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 
 // Middleware to check if the user is logged in
-const isLoggedIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next(); // If authenticated, proceed to the next middleware/controller
-    }
-    return next(new ApiError(401, 'You must be logged in to access this resource.'));
-};
 
 // Function to validate user data
 const validateUserData = (username, password) => {
@@ -95,4 +89,4 @@ const logoutUser = (req, res, next) => {
     });
 };
 
-export { registerUser, loginUser, logoutUser, isLoggedIn };
+export { registerUser, loginUser, logoutUser };

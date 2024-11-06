@@ -7,9 +7,6 @@ import bcrypt from 'bcrypt';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import User from './models/user.model.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const app = express();
 
@@ -80,7 +77,15 @@ app.get("/", (_, res) => {
 import userRoutes from './routes/user.route.js';
 app.use('/api/v1/user', userRoutes);
 
-// Test route
-app.get('/', (req, res) => res.send('Hello, world!'));
+import notesRoutes from "./routes/note.route.js"
+app.use("/api/v1/notes", notesRoutes)
+
+import fileRoutes from "./routes/files.route.js"
+app.use("/api/v1/files", fileRoutes)
+
+import flashcardRoutes from "./routes/flashcards.route.js"
+app.use("/api/v1/flashcards", flashcardRoutes)
+
+
 
 export default app;
