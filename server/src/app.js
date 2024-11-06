@@ -1,4 +1,3 @@
-// app.js (or your main file)
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
@@ -10,28 +9,28 @@ import User from './models/user.model.js';
 
 const app = express();
 
+// CORS Middleware (only apply this once)
+app.use(cors({
+    origin: 'http://localhost:5173', // Your frontend URL
+    credentials: true, // Allow cookies and credentials to be sent
+}));
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// Middleware
-app.use(cors({
-    origin: 'http://localhost:5173', // your frontend URL
-    credentials: true, // Allow credentials
-}));
 
-
+// Session middleware (make sure this is after CORS)
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpOnly: true,
-        secure: false, // Change to true for production with HTTPS
-        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,  // Prevent JavaScript from accessing cookies
+        secure: false,   // Use `true` in production with HTTPS
+        maxAge: 1000 * 60 * 60 * 24, // 1 day expiration for session cookie
     },
 }));
-
 
 // Passport.js initialization
 app.use(passport.initialize());
@@ -71,21 +70,19 @@ passport.deserializeUser(async (id, done) => {
 
 // Import and use user routes
 app.get("/", (_, res) => {
-    res.send("server connected");
+    res.send("Server connected");
 });
 
 import userRoutes from './routes/user.route.js';
 app.use('/api/v1/user', userRoutes);
 
-import notesRoutes from "./routes/note.route.js"
-app.use("/api/v1/notes", notesRoutes)
+import notesRoutes from "./routes/note.route.js";
+app.use("/api/v1/notes", notesRoutes);
 
-import fileRoutes from "./routes/files.route.js"
-app.use("/api/v1/files", fileRoutes)
+import fileRoutes from "./routes/files.route.js";
+app.use("/api/v1/files", fileRoutes);
 
-import flashcardRoutes from "./routes/flashcards.route.js"
-app.use("/api/v1/flashcards", flashcardRoutes)
-
-
+import flashcardRoutes from "./routes/flashcards.route.js";
+app.use("/api/v1/flashcards", flashcardRoutes);
 
 export default app;

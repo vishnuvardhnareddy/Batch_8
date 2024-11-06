@@ -5,6 +5,9 @@ import About from './components/About';
 import SignIn from './components/SignIn';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
+import Notes from './components/Notes';
+import FlashCards from './components/FlashCards';
+import FileList from "./components/FileList"
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useUser(); // Now useUser is defined here
@@ -22,6 +25,10 @@ const AppWrapper = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+        <Route path="/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
+        <Route path="/flashcards" element={<ProtectedRoute><FlashCards /></ProtectedRoute>} />
+        <Route path="/files" element={<ProtectedRoute><FileList /></ProtectedRoute>} />
+
         <Route path="*" element={<RedirectBasedOnUser />} />
       </Routes>
     </UserProvider>

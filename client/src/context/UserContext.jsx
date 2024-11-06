@@ -10,7 +10,7 @@ export const UserProvider = ({ children, navigate }) => {
         const savedUser = localStorage.getItem('user');
         return savedUser ? JSON.parse(savedUser) : null;
     });
-
+    const [error, setError] = useState(null);
     const URI = import.meta.env.VITE_API_URL;
 
     // Register and login
@@ -22,6 +22,7 @@ export const UserProvider = ({ children, navigate }) => {
             localStorage.setItem('user', JSON.stringify(userData));
             navigate('/home');
         } catch (error) {
+            setError(error.response?.data?.message || "Registration failed.");
             console.error("Registration error:", error);
         }
     };
@@ -35,8 +36,11 @@ export const UserProvider = ({ children, navigate }) => {
                 setUser(userData);
                 localStorage.setItem('user', JSON.stringify(userData));
                 navigate('/home');
+            } else {
+                setError(response.data.message);
             }
         } catch (error) {
+            setError(error.response?.data?.message || "Login failed.");
             console.error("Login error:", error);
         }
     };
@@ -49,6 +53,7 @@ export const UserProvider = ({ children, navigate }) => {
             localStorage.removeItem('user');
             navigate('/login');
         } catch (error) {
+            setError("Logout failed.");
             console.error("Logout error:", error);
         }
     };
@@ -58,7 +63,7 @@ export const UserProvider = ({ children, navigate }) => {
             const savedUser = localStorage.getItem('user');
             if (savedUser) {
                 try {
-                    const response = await axios.get(`${URI}/user/verify`, { withCredentials: true });
+                    const response = await axios.get(`${URI}/user/login`, { withCredentials: true });
                     if (response.data.isLoggedIn) {
                         setUser(JSON.parse(savedUser));
                     } else {
@@ -76,7 +81,7 @@ export const UserProvider = ({ children, navigate }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, registerUser, loginUser, logoutUser }}>
+        <UserContext.Provider value={{ user, registerUser, loginUser, logoutUser, error }}>
             {children}
         </UserContext.Provider>
     );
