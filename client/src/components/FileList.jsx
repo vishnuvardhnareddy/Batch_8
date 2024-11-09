@@ -69,37 +69,38 @@ const FileList = () => {
         }
     };
 
-
-
-
     return (
-        <div className="container mx-auto p-6">
-            {/* File upload section */}
-            <div className="mb-6">
-                <input
-                    type="file"
-                    onChange={(e) => setFileToUpload(e.target.files[0])}
-                    className="block mb-4 p-2 bg-gray-200 border border-gray-300 rounded-md"
-                />
-                <button
-                    onClick={handleFileUpload}
-                    disabled={!fileToUpload}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400"
-                >
-                    <FaUpload className="inline-block mr-2" /> Upload File
-                </button>
-            </div>
+        <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 p-6">
+            <div className="max-w-lg mx-auto bg-white bg-opacity-70 rounded-lg shadow-xl p-6">
+                <h2 className="text-3xl font-bold text-yellow-700 mb-6 text-center">Your Files</h2>
 
-            {/* Display files */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {files.map((file) => (
-                    <FileCard
-                        key={file._id}
-                        file={file}
-                        onDelete={handleDelete}
-                        onDownload={handleDownload}
+                {/* File upload section */}
+                <div className="mb-6 bg-yellow-50 p-4 rounded-md shadow-lg border border-yellow-200">
+                    <input
+                        type="file"
+                        onChange={(e) => setFileToUpload(e.target.files[0])}
+                        className="block mb-4 p-2 bg-gray-200 border border-gray-300 rounded-md"
                     />
-                ))}
+                    <button
+                        onClick={handleFileUpload}
+                        disabled={!fileToUpload}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 disabled:bg-gray-400 transition"
+                    >
+                        <FaUpload className="inline-block mr-2" /> Upload File
+                    </button>
+                </div>
+
+                {/* Display files */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {files.map((file) => (
+                        <FileCard
+                            key={file._id}
+                            file={file}
+                            onDelete={handleDelete}
+                            onDownload={handleDownload}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );

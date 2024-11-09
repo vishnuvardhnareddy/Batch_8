@@ -14,11 +14,11 @@ const FlashCard = ({ card, onDelete, onEdit }) => {
         <div className="flip-card" onClick={handleFlip}>
             <div className={`flip-card-inner ${isFlipped ? "flipped" : ""}`}>
                 {/* Front side with title */}
-                <div className="flip-card-front bg-white shadow-md rounded-md p-4">
-                    <h3 className="text-xl font-semibold">{card.title}</h3>
+                <div className="flip-card-front bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 shadow-md rounded-md p-4">
+                    <h3 className="text-xl font-semibold text-yellow-700">{card.title}</h3>
                 </div>
                 {/* Back side with description and actions */}
-                <div className="flip-card-back bg-white shadow-md rounded-md p-4">
+                <div className="flip-card-back bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 shadow-md rounded-md p-4">
                     <p className="text-gray-700">{card.description}</p>
                     <p className="text-sm text-gray-400 mt-4">Created on: {new Date(card.createdAt).toLocaleDateString()}</p>
                     <div className="flex mt-4">

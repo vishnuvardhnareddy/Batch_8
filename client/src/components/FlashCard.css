@@ -1,8 +1,51 @@
+/* Container for the flashcards to ensure proper spacing and alignment */
+.flashcard-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    /* Add space between cards */
+    justify-content: flex-start;
+    /* Align cards to the left */
+    padding: 16px;
+    /* Optional: Add padding around the container */
+}
+
+/* Flip card styles */
 .flip-card {
     perspective: 1000px;
     cursor: pointer;
+    width: 250px;
+    /* Set width of the card */
+    height: 350px;
+    /* Set height of the card */
+    border-radius: 8px;
+    /* Rounded corners */
+    overflow: hidden;
+    /* Ensure the card contents don't overflow */
+    border: 2px solid #e5e7eb;
+    /* Border around the card */
+    margin-bottom: 16px;
+    /* Space below each card */
 }
 
+/* Ensure cards align and wrap properly */
+@media (max-width: 1024px) {
+    .flip-card {
+        width: 200px;
+        /* Slightly smaller on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .flip-card {
+        width: 150px;
+        /* Even smaller on mobile screens */
+        height: 250px;
+        /* Adjust height to maintain proportions */
+    }
+}
+
+/* Flip card inner state and animation */
 .flip-card-inner {
     position: relative;
     width: 100%;
@@ -22,17 +65,46 @@
     height: 100%;
     backface-visibility: hidden;
     border-radius: 8px;
+    /* Rounded corners */
 }
 
+/* Front side styling */
 .flip-card-front {
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #fff;
     color: black;
+    padding: 20px;
 }
 
+/* Back side styling */
 .flip-card-back {
     transform: rotateY(180deg);
     background-color: #f3f4f6;
+    color: #333;
+    padding: 20px;
+}
+
+/* Optional: Adding some padding and margin to the buttons for edit and delete actions */
+.flip-card-back .flex {
+    margin-top: 16px;
+}
+
+.flip-card-back button {
+    margin-right: 8px;
+    padding: 6px 12px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Hover and active states for buttons */
+.flip-card-back button:hover {
+    opacity: 0.8;
+}
+
+.flip-card-back button:active {
+    opacity: 0.6;
 }
