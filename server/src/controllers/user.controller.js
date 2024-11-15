@@ -78,15 +78,28 @@ const loginUser = async (req, res, next) => {
 };
 
 // Logout user
-const logoutUser = (req, res, next) => {
+const logoutUser = async (req, res) => {
+    console.log("Attempting to log out");
+
     req.logout((err) => {
         if (err) {
-            return next(new ApiError(500, 'An error occurred while logging out. Please try again.'));
+            console.error("Error during logout:", err);
+            return res.status(500).json({ message: 'Logout failed', error: err });
         }
-        res.status(200).json(new ApiResponse(200, null, 'Logged out successfully', {
-            message: 'You have been successfully logged out. Come back soon!',
-        }));
+
+        console.log("Logout successful, destroying session");
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session:", err);
+                return res.status(500).json({ message: 'Failed to destroy session', error: err });
+            }
+
+            console.log("Session destroyed, clearing cookie");
+            res.clearCookie('connect.sid');  // Clear the session cookie
+            return res.status(200).json({ message: 'Successfully logged out' });
+        });
     });
 };
+
 
 export { registerUser, loginUser, logoutUser };

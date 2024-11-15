@@ -19,4 +19,13 @@ router.post(
 // Logout user route (only accessible if logged in)
 router.get('/logout', isLoggedIn, asyncHandler(logoutUser));
 
+
+router.get('/session', isLoggedIn, (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.json({ isLoggedIn: true, user: req.user });
+    }
+    return res.json({ isLoggedIn: false });
+});
+
+
 export default router;

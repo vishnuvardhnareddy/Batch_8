@@ -58,12 +58,13 @@ export const UserProvider = ({ children, navigate }) => {
         }
     };
 
+
     useEffect(() => {
         const verifySession = async () => {
             const savedUser = localStorage.getItem('user');
             if (savedUser) {
                 try {
-                    const response = await axios.get(`${URI}/user/login`, { withCredentials: true });
+                    const response = await axios.get(`${URI}/user/session`, { withCredentials: true });
                     if (response.data.isLoggedIn) {
                         setUser(JSON.parse(savedUser));
                     } else {
